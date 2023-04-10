@@ -2,13 +2,13 @@ import React from 'react';
 import type {NextPage} from 'next'
 
 // components
-import Counter from '../features/Counter'
+import Root from '../src/containers/Root'
 
 const Home: NextPage = () => {
     return (
-        <Counter/>
+        <Root/>
     )
-}
+};
 
 export default Home
 

@@ -1,15 +1,14 @@
 import React from 'react';
-import Document, {DocumentContext, Head, Main, NextScript} from 'next/document';
-import {ServerStyleSheets} from '@material-ui/styles';
-import theme from '../src/theme';
+import Document, {DocumentContext, Head, Main, NextScript, Html} from 'next/document';
+// import {ServerStyleSheets} from '@material-ui/styles';
 
 class MyDocument extends Document {
     static async getInitialProps(ctx: DocumentContext) {
-        const materialSheets = new ServerStyleSheets()
+        // const materialSheets = new ServerStyleSheets()
         const originalRenderPage = ctx.renderPage;
         ctx.renderPage = () => originalRenderPage({
             // @ts-ignore
-            enhanceApp: App => (props: JSX.IntrinsicAttributes) => materialSheets.collect(<App {...props} />)
+            enhanceApp: App => (props: JSX.IntrinsicAttributes) => <App {...props} />
         })
         const initialProps = await Document.getInitialProps(ctx)
         return {
@@ -17,7 +16,7 @@ class MyDocument extends Document {
             styles: (
                 <React.Fragment>
                     {initialProps.styles}
-                    {materialSheets.getStyleElement()}
+                    {/*{materialSheets.getStyleElement()}*/}
                 </React.Fragment>
             )
         }
@@ -25,29 +24,29 @@ class MyDocument extends Document {
 
     render() {
         return (
-            <html lang="en" dir="ltr">
-            <Head>
-                <meta charSet="utf-8"/>
-                {/* Use minimum-scale=1 to enable GPU rasterization */}
-                <meta
-                    name="viewport"
-                    content="minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no"
-                />
-                {/* PWA primary color */}
-                <meta
-                    name="theme-color"
-                    content={theme.palette.primary.main}
-                />
-                <link
-                    rel="stylesheet"
-                    href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
-                />
-            </Head>
-            <body>
-            <Main/>
-            <NextScript/>
-            </body>
-            </html>
+            <Html lang="en" dir="ltr">
+                <Head>
+                    <meta charSet="utf-8"/>
+                    {/* Use minimum-scale=1 to enable GPU rasterization */}
+                    <meta
+                        name="viewport"
+                        content="minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no"
+                    />
+                    {/* PWA primary color */}
+                    <meta
+                        name="theme-color"
+                        // content={theme.palette.primary.main}
+                    />
+                    <link
+                        rel="stylesheet"
+                        href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
+                    />
+                </Head>
+                <body>
+                <Main/>
+                <NextScript/>
+                </body>
+            </Html>
         );
     }
 }

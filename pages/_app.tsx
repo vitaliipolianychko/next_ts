@@ -1,38 +1,52 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, {createContext} from 'react';
 import Head from 'next/head';
-import { ThemeProvider } from '@material-ui/core/styles';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import theme from '../src/theme';
-import {AppProps} from "next/app";
+import type {NextPage} from 'next'
+import type {AppProps} from 'next/app'
+import {QueryClient, QueryClientProvider} from '@tanstack/react-query'
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 
-// redux
-import { store } from '../store'
-import { Provider } from 'react-redux'
 
-export default function MyApp(props: AppProps) {
-    const {Component, pageProps} = props;
+// hooks
+import useProvideAuth from "../src/hooks/useUser";
+import {IUser} from "../src/services/auth";
+import {FormValues} from "../src/components/DailyComponent";
 
-    React.useEffect(() => {
-        // Remove the server-side injected CSS.
-        const jssStyles = document.querySelector('#jss-server-side');
-        if (jssStyles) {
-            // @ts-ignore
-            jssStyles.parentElement.removeChild(jssStyles);
-        }
-    }, []);
+interface IAuthContext {
+    onLogin: (data: FormValues) => void,
+    onLogout: () => void,
+    user: IUser
+}
 
-    return (
-        <Provider store={store}>
+export const AuthContext = createContext<IAuthContext | null>(null);
+
+export type NextPageWithLayout = NextPage & {
+    getLayout?: (page: React.ReactElement) => React.ReactNode
+}
+
+type AppPropsWithLayout = AppProps & {
+    Component: NextPageWithLayout
+}
+
+const queryClient = new QueryClient();
+
+export default function MyApp({Component, pageProps}: AppPropsWithLayout) {
+    const userAuth: IAuthContext = useProvideAuth();
+    // Use the layout defined at the page level, if available
+    const getLayout = Component.getLayout ?? ((page) => (
+        <>
             <Head>
-                <title>My page</title>
+                <title>Something ...</title>
                 <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width"/>
             </Head>
-            <ThemeProvider theme={theme}>
-                {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
-                <CssBaseline/>
-                <Component {...pageProps} />
-            </ThemeProvider>
-        </Provider>
-    );
+            <AuthContext.Provider value={userAuth}>
+                {page}
+            </AuthContext.Provider>
+        </>
+    ));
+
+    return getLayout(
+        <QueryClientProvider client={queryClient}>
+            <ReactQueryDevtools initialIsOpen={false} />
+            <Component {...pageProps} />
+        </QueryClientProvider>)
 }

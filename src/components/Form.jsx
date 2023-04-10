@@ -1,85 +1,44 @@
-import React, {useState} from "react";
-import {useForm, SubmitHandler, Controller} from "react-hook-form";
-import clientApi from '../helpers/clientApi';
+import React, { useContext, useState } from 'react'
 
 // components
-import InputComponent from './FormComponents/Input'
-import {Button} from "antd";
+import { Button } from 'antd'
+import 'antd/dist/antd.css'
 
-import "antd/dist/antd.css"
-
-interface IFormInput {
-    email: string;
-    password: string;
-}
-
-interface IUser {
-    id: string,
-    email: string,
-    isActivated: boolean,
-    accessToken: string,
-    refreshToken: string
-}
-
-interface IData {
-    data: IUser
-}
+// services
+import { getUsers } from '../services/user'
+import { AuthContext } from '../../pages/_app'
 
 const Form = () => {
-    const form = useForm<IFormInput>();
-    const [user, setUser] = useState({});
-    console.log(user, 'user');
-    const {control, handleSubmit} = form;
+  const [users, setUsers] = useState([])
 
-    const onSubmit: SubmitHandler<IFormInput> = (values: IFormInput) => {
-        clientApi.post('/registration', values)
-            .then((res: IData) => {
-                setUser(res.data);
-                const { refreshToken } = res.data;
-                localStorage.setItem('token', refreshToken)
-            })
-            .catch((er: Error) => console.log(er))
-    };
+  const { user, onLogout } = useContext(AuthContext)
 
-    const logout = () => {
-        clientApi.post('/logout')
-            .then(() => localStorage.removeItem('token'))
-    };
+  const getUsersList = () => {
+    getUsers()
+      .then(res => setUsers(res.data))
+      .catch(er => console.log(er))
+  }
 
-    return (
-        <>
-            <form onSubmit={handleSubmit(onSubmit)}>
-                <div
-                    style={{
-                        height: '100%',
-                        padding: '100px',
-                        display: 'flex',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        gap: '50px'
-                    }}
-                >
-                    <Controller
-                        name="email"
-                        control={control}
-                        render={({field}) => <InputComponent field={field}/>}
-                    />
-                    <Controller
-                        name="password"
-                        control={control}
-                        render={({field}) => <InputComponent field={field}/>}
-                    />
-                </div>
+  const usersListComponent = (
+    <div>
+      {users.map(item => (
+        <p>{item.email}</p>
+      ))}
+      <Button onClick={getUsersList}>
+        get users
+      </Button>
+    </div>
+  )
 
-                <Button type="primary" htmlType="submit">
-                    Primary
-                </Button>
-            </form>
-            <Button onClick={logout}>
-                Logout
-            </Button>
-        </>
-    )
+  return (
+    <>
+      <h1>{user.email}</h1>
+      <Button onClick={onLogout}>
+        Logout
+      </Button>
+      {usersListComponent}
+    </>
+  )
 }
 
 export default Form
