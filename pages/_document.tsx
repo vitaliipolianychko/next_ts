@@ -1,10 +1,8 @@
 import React from 'react';
 import Document, {DocumentContext, Head, Main, NextScript, Html} from 'next/document';
-// import {ServerStyleSheets} from '@material-ui/styles';
 
 class MyDocument extends Document {
     static async getInitialProps(ctx: DocumentContext) {
-        // const materialSheets = new ServerStyleSheets()
         const originalRenderPage = ctx.renderPage;
         ctx.renderPage = () => originalRenderPage({
             // @ts-ignore
@@ -16,7 +14,6 @@ class MyDocument extends Document {
             styles: (
                 <React.Fragment>
                     {initialProps.styles}
-                    {/*{materialSheets.getStyleElement()}*/}
                 </React.Fragment>
             )
         }

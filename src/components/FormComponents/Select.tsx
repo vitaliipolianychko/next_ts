@@ -4,10 +4,6 @@ import { Select } from 'antd';
 // interfaces
 import { ICategory } from "../../helpers/categories";
 
-const onSearch = (value: string) => {
-    console.log('search:', value);
-};
-
 interface ISelect {
     options: ICategory[],
     placeholder: string,
@@ -22,7 +18,6 @@ const SelectComponent = ({ options = [], placeholder, field }: ISelect) => {
             style={{ width: 160 }}
             placeholder={placeholder}
             optionFilterProp="children"
-            onSearch={onSearch}
             filterOption={(input, option) =>
                 (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
             }

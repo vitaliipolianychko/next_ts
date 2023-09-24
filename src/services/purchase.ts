@@ -8,10 +8,15 @@ export interface IPurchase {
     userId: string
 }
 
+interface IParams {
+  start: string | null,
+  end: string | null
+}
+
 export const addPurchase = async (place: string, category: string, price: number): Promise<AxiosResponse<IPurchase>> => {
     return clientApi.post<IPurchase>('/purchase', {place, category, price})
 };
 
-export const getPurchase = async (): Promise<AxiosResponse<IPurchase[]>> => {
-    return clientApi.get<IPurchase[]>('/purchases')
+export const getPurchase = async (params: IParams): Promise<AxiosResponse<IPurchase[]>> => {
+    return clientApi.get<IPurchase[]>('/purchases', { params })
 };

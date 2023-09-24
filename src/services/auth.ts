@@ -2,9 +2,9 @@ import clientApi from '../helpers/clientApi'
 import {AxiosResponse} from "axios";
 
 export interface IUser {
-    email: string,
-    id: string,
-    isActivated: boolean
+    email?: string,
+    id?: string,
+    isActivated?: boolean
 }
 
 export interface IAuthResponse {

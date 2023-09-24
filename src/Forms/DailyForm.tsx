@@ -6,7 +6,6 @@ import {useForm, Controller} from 'react-hook-form'
 import InputComponent from '../components/FormComponents/Input'
 import SelectComponent from '../components/FormComponents/Select'
 import {Button} from 'antd'
-import 'antd/dist/antd.css'
 import {InputNumber} from 'antd';
 
 // helpers
@@ -35,18 +34,23 @@ const DailyForm = () => {
                 <div
                     style={{
                         height: '100%',
-                        padding: '100px',
                         display: 'flex',
                         justifyContent: 'center',
                         alignItems: 'center',
+                        border: '1px solid black',
+                        borderRadius: '10px',
+                        padding: '16px',
                         gap: '24px'
                     }}
                 >
-                    <Controller
-                        name="category"
-                        control={control}
-                        render={({field}) => <SelectComponent options={categories} placeholder="Category..." field={field}/>}
-                    />
+                    <div style={{minWidth: '300px'}}>
+                        <Controller
+                            name="category"
+                            control={control}
+                            render={({field}) => <SelectComponent options={categories} placeholder="Category..."
+                                                                  field={field}/>}
+                        />
+                    </div>
                     <Controller
                         name="place"
                         control={control}
@@ -56,14 +60,14 @@ const DailyForm = () => {
                         <Controller
                             name="price"
                             control={control}
-                            render={({field}) => <InputNumber {...field}/>}
+                            render={({field}) => <InputNumber placeholder="Price..." {...field}/>}
                         />
                     </div>
-                </div>
 
-                <Button type="primary" htmlType="submit">
-                    Submit
-                </Button>
+                    <Button type="primary" htmlType="submit">
+                        Submit
+                    </Button>
+                </div>
             </form>
         </div>
     )
