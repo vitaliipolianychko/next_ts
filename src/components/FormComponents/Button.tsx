@@ -5,7 +5,7 @@ import { Button } from "antd"
 
 type ButtonTypes = {
     label: string,
-    handleClick: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void
+    handleClick: any
 }
 
 const ButtonComponent = ({ label, handleClick }: ButtonTypes) => {

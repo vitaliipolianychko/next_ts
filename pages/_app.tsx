@@ -5,7 +5,6 @@ import type {AppProps} from 'next/app'
 import {QueryClient, QueryClientProvider} from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 
-
 // hooks
 import useProvideAuth from "../src/hooks/useUser";
 import {IUser} from "../src/services/auth";
@@ -35,7 +34,7 @@ export default function MyApp({Component, pageProps}: AppPropsWithLayout) {
     const getLayout = Component.getLayout ?? ((page) => (
         <>
             <Head>
-                <title>Something ...</title>
+                <title>Cash assistant</title>
                 <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width"/>
             </Head>
             <AuthContext.Provider value={userAuth}>
@@ -48,5 +47,6 @@ export default function MyApp({Component, pageProps}: AppPropsWithLayout) {
         <QueryClientProvider client={queryClient}>
             <ReactQueryDevtools initialIsOpen={false} />
             <Component {...pageProps} />
-        </QueryClientProvider>)
+        </QueryClientProvider>
+    )
 }
